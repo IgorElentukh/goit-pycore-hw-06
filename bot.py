@@ -10,44 +10,44 @@ class Field:
 
 
 class Name(Field):
-    def __init__(self, value):
+    def __init__(self, value: str):
         if not isinstance(value, str) and len(value.strip() == 0):
               raise ValueError("Name should be a text")
         super().__init__(value)
 
 
 class Phone(Field):
-    def __init__(self, value):
+    def __init__(self, value: str):
         if not (value.isdigit() and len(value) == 10):
               raise ValueError("Telephone must contain 10 digits")
         super().__init__(value)
           
 
 class Record:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = Name(name)
         self.phones = []
 
     
-    def add_phone(self, value):
+    def add_phone(self, value: str):
          self.phones.append(Phone(value))
 
 
-    def edit_phone(self, oldNumber, newNumber):
+    def edit_phone(self, old_number: str, new_number: str):
          for i, phone in enumerate(self.phones):
-            if phone.value == oldNumber:
-                self.phones[i] = Phone(newNumber)
+            if phone.value == old_number:
+                self.phones[i] = Phone(new_number)
                 break
 
     
-    def remove_phone(self, number):
+    def remove_phone(self, number: str):
         for phone in self.phones:
             if phone.value == number:
                 self.phones.remove(phone)
                 return
 
 
-    def find_phone(self, number):
+    def find_phone(self, number: str):
         for phone in self.phones:
             if phone.value == number:
                 return phone
@@ -60,15 +60,18 @@ class Record:
 
 
 class AddressBook(UserDict):
-    def add_record(self, record):
+    def add_record(self, record: Record):
+        if not isinstance(record, Record):
+            raise TypeError("record should be a Record type")
+        
         self.data[record.name.value] = record
 
     
-    def find(self, name):
+    def find(self, name: str):
         return self.data.get(name)
     
 
-    def delete(self, name):
+    def delete(self, name: str):
         self.data.pop(name, None)
 
 
